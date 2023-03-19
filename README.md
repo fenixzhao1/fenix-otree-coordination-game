@@ -11,7 +11,7 @@ Under the project's root directory, run:
 `python3 -m venv venv`
 
 
-`source venv/bin/activate`
+`source venv/Scripts/activate`
 
 ### 3. Install dependencies
 
@@ -21,14 +21,14 @@ Under the project's root directory, run:
 
 If you have installed other versions of otree on your computer before, you can reactivate the virtual enviroment to make sure you are using the otree in the venv:
 
-`source venv/bin/activate`
+`source venv/Scripts/activate`
 
 ## Running the program on your local machine
 ### 1. Activate the virtual enviroment
 
 Go to the project's root directory and run:
 
-`source venv/bin/activate`
+`source venv/Scripts/activate`
 
 ### 2. Start Otree
 
@@ -57,7 +57,7 @@ root@instance-2:/path#
 
 Go to the project's root directory and run:
 
-`source venv/bin/activate`
+`source venv/Scripts/activate`
 
 ### (Optional) Set OTREE_PRODUCTION=1 to enter production mode
 
@@ -72,7 +72,7 @@ If the program doesn't work for some reasons, you can try two things:
 
 1. Reactivate the virtuanl enviroment
 
-`source venv/bin/activate`
+`source venv/Scripts/activate`
 
 2. Reset the otree database
 

@@ -23,10 +23,10 @@ class Constants(BaseConstants):
 	# in the config file.
     num_rounds = 100
     base_points = 0
-    
 
 
-def parse_config(config_file):
+
+def parse_config(config_file, num_subperiods = 2):
     with open('coordination_game/configs/' + config_file) as f:
         rows = list(csv.DictReader(f))
 
@@ -35,7 +35,7 @@ def parse_config(config_file):
         rounds.append({
             'shuffle_role': True if row['shuffle_role'] == 'TRUE' else False,
             'period_length': int(row['period_length']),
-            'num_subperiods': int(row['num_subperiods']),
+            'num_subperiods': int(num_subperiods),
             'pure_strategy': True if row['pure_strategy'] == 'TRUE' else False,
             'show_at_worst': True if row['show_at_worst'] == 'TRUE' else False,
             'show_best_response': True if row['show_best_response'] == 'TRUE' else False,
@@ -64,7 +64,7 @@ class Subsession(BaseSubsession):
 
         #Random round picked for payment
         self.session.vars['payment_round'] = random.randint(4, self.num_rounds())
-        
+
         num_silos = self.session.config['num_silos']
         fixed_id_in_group = not config['shuffle_role']
 
@@ -90,7 +90,7 @@ class Subsession(BaseSubsession):
             group_matrix.extend(otree.common._group_randomly(silo_matrix, fixed_id_in_group))
 
         self.set_group_matrix(group_matrix)
-    
+
     def set_initial_decisions(self):
         pure_strategy = self.config['pure_strategy']
         for player in self.get_players():
@@ -105,7 +105,18 @@ class Subsession(BaseSubsession):
     @property
     def config(self):
         try:
-            return parse_config(self.session.config['config_file'])[self.round_number-1]
+            num_subperiods_selection = []
+            for player in self.get_players():
+                if player.num_subperiods:
+                    num_subperiods_selection.append(int(player.num_subperiods))
+            num_subperiods = 2
+            if len(num_subperiods_selection):
+                # Option 1: use max num_subperiods input
+                num_subperiods = max([num_subperiods, max(num_subperiods_selection)])
+                # Option 2: use min num_subperiods input
+                # num_subperiods = max([num_subperiods, min(num_subperiods_selection)])
+
+            return parse_config(self.session.config['config_file'], num_subperiods)[self.round_number-1]
         except IndexError:
             return None
 
@@ -117,7 +128,7 @@ class Group(DecisionGroup):
 
     def period_length(self):
         return self.subsession.config['period_length']
-    
+
     def rate_limit(self):
         config = self.subsession.config
         if not config['pure_strategy'] and config['mean_matching']:
@@ -145,6 +156,9 @@ class Player(BasePlayer):
     _message = models.StringField(
         label='What is your message?'
     )
+    num_subperiods = models.StringField(
+        label='Enter number of subperiods'
+    )
 
     def initial_decision(self):
         return self._initial_decision
@@ -154,10 +168,10 @@ class Player(BasePlayer):
             return 'column'
         else:
             return 'row'
-    
+
     def message(self):
         return self._message
-    
+
     def set_message(self, string):
         self._messsage = string
 
@@ -182,7 +196,7 @@ class Player(BasePlayer):
             if (decision_value == choice):
                 count += 1
         return count / total
-        
+
 
     def set_payoff(self, period_start, period_end, decisions, payoff_matrix):
         period_duration = period_end - period_start
@@ -226,6 +240,6 @@ class Player(BasePlayer):
                 decision_length = (next_change_time - d.timestamp).total_seconds()
             payoff += decision_length * flow_payoff
 
-        self.payoff = payoff / period_duration.total_seconds()    
+        self.payoff = payoff / period_duration.total_seconds()
         if self.round_number == self.subsession.num_rounds():
             self.final_payoff = self.in_round(self.session.vars['payment_round']).payoff

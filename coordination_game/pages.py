@@ -11,6 +11,13 @@ class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+class ConfigUpdate(Page):
+
+    form_model = 'player'
+    form_fields = ['num_subperiods']
+
+    def is_displayed(self):
+        return self.subsession.config is not None
 
 class CommunicationWaitPage(WaitPage):
 
@@ -30,7 +37,7 @@ class Communication(Page):
 
     def is_displayed(self):
         return self.subsession.config is not None and parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication'] != 0
-    
+
     def vars_for_template(self):
         communication = parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication']
 
@@ -56,7 +63,7 @@ class CommunicationReceive(Page):
 
     def is_displayed(self):
         return self.subsession.config is not None and parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication'] == 1
-    
+
     def vars_for_template(self):
         messages = [ { 'player': 'Counterpart' , 'message': p.message()} for p in self.group.get_players() if p.role() != self.player.role()]
         messages.append({'player': 'Me', 'message':self.player.message() })
@@ -119,7 +126,7 @@ class Results(Page):
 
         counter_frequencies_top = [ p.get_frequency( 1, decisions) for p in self.group.get_players() if p.role() != self.player.role() ]
         counter_frequencies_bottom = [ p.get_frequency( 0, decisions) for p in self.group.get_players() if p.role() != self.player.role() ]
-        
+
         freq_top = self.player.get_frequency( 1, decisions)
         freq_bottom = self.player.get_frequency( 0, decisions)
 
@@ -136,7 +143,7 @@ class Payment(Page):
 
     def is_displayed(self):
         return self.round_number == self.subsession.num_rounds()
-    
+
     def vars_for_template(self):
 
         return {
@@ -147,6 +154,7 @@ class Payment(Page):
 
 page_sequence = [
     Introduction,
+    ConfigUpdate,
     CommunicationWaitPage,
     Communication,
     CommunicationReceiveWaitPage,
