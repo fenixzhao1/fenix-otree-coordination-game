@@ -2,10 +2,18 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Please choose number of subperiods
+    Please choose the time environment you prefer to play
 {% endblock %}
 
 {% block content %}
+
+<p>
+Please enter 0 if you prefer to play under the continuous time environment.
+Please enter a positive integer if you prefer to play under the discrete time environment,
+where the interger you enter is the number of periods you would like to have.
+Note that the total length of the game is 120 seconds, so the more periods you play, the shorter each period lasts.
+</p>
+
     {% formfields %}
 
     {% next_button %}

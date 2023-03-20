@@ -11,7 +11,7 @@ import math
 import otree.common
 
 doc = """
-This is a configurable bimatrix game.
+This is a configurable bimatrix game that allows players to choose the time environments.
 """
 
 
@@ -26,7 +26,7 @@ class Constants(BaseConstants):
 
 
 
-def parse_config(config_file, num_subperiods = 2):
+def parse_config(config_file, num_subperiods = 10):
     with open('coordination_game/configs/' + config_file) as f:
         rows = list(csv.DictReader(f))
 
@@ -51,6 +51,7 @@ def parse_config(config_file, num_subperiods = 2):
             'signaltwo_exist': True if row['signaltwo_exist'] == 'TRUE' else False,
             'signaltwo_freq': int(row['signaltwo_freq']),
             'signalthree_exist': True if row['signalthree_exist'] == 'TRUE' else False,
+            'choose_time': str(row['choose_time'])
         })
     return rounds
 
@@ -109,10 +110,10 @@ class Subsession(BaseSubsession):
             for player in self.get_players():
                 if player.num_subperiods:
                     num_subperiods_selection.append(int(player.num_subperiods))
-            num_subperiods = 2
+            num_subperiods = 10
             if len(num_subperiods_selection):
                 # Option 1: use max num_subperiods input
-                num_subperiods = max([num_subperiods, max(num_subperiods_selection)])
+                num_subperiods = max(num_subperiods_selection)
                 # Option 2: use min num_subperiods input
                 # num_subperiods = max([num_subperiods, min(num_subperiods_selection)])
 
@@ -156,8 +157,9 @@ class Player(BasePlayer):
     _message = models.StringField(
         label='What is your message?'
     )
-    num_subperiods = models.StringField(
-        label='Enter number of subperiods'
+    num_subperiods = models.IntegerField(
+        label='Enter the number of subperiods you prefer (0 for continuous time)',
+        min=0, max=120
     )
 
     def initial_decision(self):

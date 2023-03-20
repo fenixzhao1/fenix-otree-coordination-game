@@ -8,9 +8,12 @@
 {% block content %}
 <p>
 Thank you for participating in this interactive decision-making experiment.
-    To start the experiment, please press next. The experiment starts when everyone is ready.
+Please read the instruction below. The experiment will start when everyone is ready.
 </p>
 
-    {% next_button %}
+<iframe src="{{ static 'bimatrix/instruction_bimatrix.pdf' }}" width="100%" height="700px">
+    </iframe>
+
+    <!-- {% next_button %} -->
 
 {% endblock %}
