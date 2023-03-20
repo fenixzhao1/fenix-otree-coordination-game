@@ -23,6 +23,7 @@ def get_config_columns(group):
         config['signaltwo_exist'],
         config['signaltwo_freq'],
         config['signalthree_exist'],
+        config['choose_time']
     ]
 
 def get_output_table_header(groups):
@@ -51,6 +52,7 @@ def get_output_table_header(groups):
         'signaltwo_exist',
         'signaltwo_freq',
         'signalthree_exist',
+        'choose_time'
     ]
 
     header += [

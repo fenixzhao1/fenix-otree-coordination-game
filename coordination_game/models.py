@@ -26,7 +26,7 @@ class Constants(BaseConstants):
 
 
 
-def parse_config(config_file, num_subperiods = 10):
+def parse_config(config_file, num_subperiods = -1):
     with open('coordination_game/configs/' + config_file) as f:
         rows = list(csv.DictReader(f))
 
@@ -110,7 +110,7 @@ class Subsession(BaseSubsession):
             for player in self.get_players():
                 if player.num_subperiods:
                     num_subperiods_selection.append(int(player.num_subperiods))
-            num_subperiods = 10
+            num_subperiods = -1
             if len(num_subperiods_selection):
                 # Option 1: use max num_subperiods input
                 num_subperiods = max(num_subperiods_selection)
