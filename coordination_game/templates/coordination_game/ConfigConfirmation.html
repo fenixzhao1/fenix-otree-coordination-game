@@ -1,0 +1,12 @@
+{% extends "otree_redwood/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Selected time environment
+{% endblock %}
+
+{% block content %}
+    <p>{{ num_subperiods }}</p>
+
+    {% next_button %}
+{% endblock %}

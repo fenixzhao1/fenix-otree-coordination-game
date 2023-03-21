@@ -24,9 +24,31 @@ class Constants(BaseConstants):
     num_rounds = 100
     base_points = 0
 
+def calc_num_subperiods(choose_time, num_subperiods, players):
+    if choose_time == 'row':
+        for player in players:
+            if player.id_in_group == 1:
+                if player.num_subperiods:
+                    return int(player.num_subperiods)
+                return num_subperiods
+    elif choose_time == 'column':
+        for player in players:
+            if player.id_in_group == 2:
+                if player.num_subperiods:
+                    return int(player.num_subperiods)
+                return num_subperiods
+    elif choose_time == 'random':
+        num_subperiods_selection = []
+        for player in players:
+            if player.num_subperiods:
+                num_subperiods_selection.append(int(player.num_subperiods))
+        if len(num_subperiods_selection):
+            return random.choice(num_subperiods_selection)
+        return num_subperiods
+    else:
+        return num_subperiods
 
-
-def parse_config(config_file, num_subperiods = -1):
+def parse_config(config_file, players):
     with open('coordination_game/configs/' + config_file) as f:
         rows = list(csv.DictReader(f))
 
@@ -35,7 +57,7 @@ def parse_config(config_file, num_subperiods = -1):
         rounds.append({
             'shuffle_role': True if row['shuffle_role'] == 'TRUE' else False,
             'period_length': int(row['period_length']),
-            'num_subperiods': int(num_subperiods),
+            'num_subperiods': calc_num_subperiods(str(row['choose_time']), int(row['num_subperiods']), players),
             'pure_strategy': True if row['pure_strategy'] == 'TRUE' else False,
             'show_at_worst': True if row['show_at_worst'] == 'TRUE' else False,
             'show_best_response': True if row['show_best_response'] == 'TRUE' else False,
@@ -101,23 +123,12 @@ class Subsession(BaseSubsession):
                 player._initial_decision = random.random()
 
     def num_rounds(self):
-        return len(parse_config(self.session.config['config_file']) )
+        return len(parse_config(self.session.config['config_file'], self.get_players()))
 
     @property
     def config(self):
         try:
-            num_subperiods_selection = []
-            for player in self.get_players():
-                if player.num_subperiods:
-                    num_subperiods_selection.append(int(player.num_subperiods))
-            num_subperiods = -1
-            if len(num_subperiods_selection):
-                # Option 1: use max num_subperiods input
-                num_subperiods = max(num_subperiods_selection)
-                # Option 2: use min num_subperiods input
-                # num_subperiods = max([num_subperiods, min(num_subperiods_selection)])
-
-            return parse_config(self.session.config['config_file'], num_subperiods)[self.round_number-1]
+            return parse_config(self.session.config['config_file'], self.get_players())[self.round_number-1]
         except IndexError:
             return None
 

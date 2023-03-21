@@ -17,7 +17,25 @@ class ConfigUpdate(Page):
     form_fields = ['num_subperiods']
 
     def is_displayed(self):
-        return self.subsession.config is not None
+        return self.subsession.config is not None and str(self.subsession.config['choose_time']) != 'no'
+
+class ConfigUpdateWaitingPage(WaitPage):
+
+    body_text = 'Waiting for all players to be ready'
+    wait_for_all_groups = True
+
+    def is_displayed(self):
+        return self.subsession.config is not None and str(self.subsession.config['choose_time']) != 'no'
+
+class ConfigConfirmation(Page):
+
+    def is_displayed(self):
+        return self.subsession.config is not None and str(self.subsession.config['choose_time']) != 'no'
+
+    def vars_for_template(self):
+        return {
+            'num_subperiods': self.subsession.config['num_subperiods']
+        }
 
 class CommunicationWaitPage(WaitPage):
 
@@ -26,8 +44,7 @@ class CommunicationWaitPage(WaitPage):
     #after_all_players_arrive = 'set_initial_decisions'
 
     def is_displayed(self):
-        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication'] != 0
-
+        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['communication'] != 0
 
 class Communication(Page):
     timeout_seconds = 40
@@ -36,17 +53,17 @@ class Communication(Page):
 
 
     def is_displayed(self):
-        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication'] != 0
+        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['communication'] != 0
 
     def vars_for_template(self):
-        communication = parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication']
+        communication = parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['communication']
 
-        periods = max(int(parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['num_subperiods']), 1)
+        periods = max(int(parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['num_subperiods']), 1)
 
         return {
             'realtime': True if communication == 2 else False,
             'channel': str(self.group.session.code)+ "_" + str(self.group.subsession_id) + "_" + str(self.group.id_in_subsession),
-            'secs_per_per': int(parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['period_length']) / periods
+            'secs_per_per': int(parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['period_length']) / periods
         }
 
 class CommunicationReceiveWaitPage(WaitPage):
@@ -56,13 +73,13 @@ class CommunicationReceiveWaitPage(WaitPage):
     #after_all_players_arrive = 'set_initial_decisions'
 
     def is_displayed(self):
-        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication'] == 1
+        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['communication'] == 1
 
 class CommunicationReceive(Page):
     timeout_seconds = 20
 
     def is_displayed(self):
-        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'])[self.group.round_number - 1]['communication'] == 1
+        return self.subsession.config is not None and parse_config(self.group.session.config['config_file'], self.group.get_players())[self.group.round_number - 1]['communication'] == 1
 
     def vars_for_template(self):
         messages = [ { 'player': 'Counterpart' , 'message': p.message()} for p in self.group.get_players() if p.role() != self.player.role()]
@@ -155,6 +172,8 @@ class Payment(Page):
 page_sequence = [
     Introduction,
     ConfigUpdate,
+    ConfigUpdateWaitingPage,
+    ConfigConfirmation,
     CommunicationWaitPage,
     Communication,
     CommunicationReceiveWaitPage,
