@@ -7,7 +7,12 @@
 
 {% block content %}
 
-    
+{{ if subsession.config['num_subperiods'] == 0 }}
+    <p>You will play the 2-minute game under the continuous time environment.</p>
+{{ else }}
+    <p>You will play the 2-minute game under the discrete time environment with {{ num_subperiods }} periods.</p>
+{{ endif }}
+
     <p> {{ num_subperiods }} </p>
     <p> If you are ready, press next. </p>
 

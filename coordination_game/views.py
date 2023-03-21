@@ -5,7 +5,7 @@ from functools import reduce
 from .models import parse_config
 
 def get_config_columns(group):
-    config = parse_config(group.session.config['config_file'])[group.round_number - 1]
+    config = parse_config(group.session.config['config_file'], group.get_players())[group.round_number - 1]
     payoffs = config['payoff_matrix']
     payoffs = reduce(concat, payoffs)
 
