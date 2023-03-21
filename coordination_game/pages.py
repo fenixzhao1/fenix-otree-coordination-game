@@ -29,6 +29,8 @@ class ConfigUpdateWaitingPage(WaitPage):
 
 class ConfigConfirmation(Page):
 
+    timeout_seconds = 10
+
     def is_displayed(self):
         return self.subsession.config is not None and str(self.subsession.config['choose_time']) != 'no'
 

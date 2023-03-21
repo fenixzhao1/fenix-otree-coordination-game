@@ -2,11 +2,18 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Selected time environment
+    The time environment you are going to play
 {% endblock %}
 
 {% block content %}
-    <p>{{ num_subperiods }}</p>
+
+    {{ if num_subperiods == 0 }}
+        <p>You will play the 2-minute game under the continuous time environment.</p>
+    {{ else }}
+        <p>You will play the 2-minute game under the discrete time environment with {{ num_subperiods }} periods.</p>
+    {{ endif }}
+
+    <p> If you are ready, press next. </p>
 
     {% next_button %}
 {% endblock %}
