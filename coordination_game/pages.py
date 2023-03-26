@@ -27,6 +27,11 @@ class ConfigUpdate(Page):
     def is_displayed(self):
         return self.subsession.config is not None and str(self.subsession.config['choose_time']) != 'no'
 
+    def vars_for_template(self):
+        return {
+            'choose_time': str(self.subsession.config['choose_time'])
+        }
+
 class ConfigConfirmationWaitPage(WaitPage):
 
     body_text = 'Waiting for all players to be ready'
@@ -182,7 +187,7 @@ page_sequence = [
     CommunicationReceive,
     ConfigUpdateWaitPage,
     ConfigUpdate,
-    ConfigConfirmationWaitPage
+    ConfigConfirmationWaitPage,
     ConfigConfirmation,
     DecisionWaitPage,
     Decision,

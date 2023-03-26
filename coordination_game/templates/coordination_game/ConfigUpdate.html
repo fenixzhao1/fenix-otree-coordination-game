@@ -19,6 +19,14 @@ where the interger you enter is the number of periods you would like to have.
 Note that the total length of the game is 120 seconds, so the more periods you play, the shorter each period lasts.
 </p>
 
+{% if choose_time == 'row' %}
+    <p>Choose time is row</p>
+{% elif choose_time == 'column' %}
+    <p>Choose time is column</p>
+{% else %}
+    <p>Choose time is random</p>
+{% endif %}
+
     {% formfields %}
 
     {% next_button %}
