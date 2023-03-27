@@ -24,26 +24,21 @@ class Constants(BaseConstants):
     num_rounds = 100
     base_points = 0
 
-def calc_num_subperiods(choose_time, num_subperiods, players):
+def get_num_subperiods(choose_time, num_subperiods, choose_time_id, players):
     if choose_time == 'row':
         for player in players:
-            if player.id_in_group == 1:
-                if player.num_subperiods:
-                    return int(player.num_subperiods)
-                return num_subperiods
+            if player.id_in_group == 1 and player.num_subperiods:
+                return int(player.num_subperiods)
+        return num_subperiods
     elif choose_time == 'column':
         for player in players:
-            if player.id_in_group == 2:
-                if player.num_subperiods:
-                    return int(player.num_subperiods)
-                return num_subperiods
+            if player.id_in_group == 2 and player.num_subperiods:
+                return int(player.num_subperiods)
+        return num_subperiods
     elif choose_time == 'random':
-        num_subperiods_selection = []
         for player in players:
-            if player.num_subperiods:
-                num_subperiods_selection.append(int(player.num_subperiods))
-        if len(num_subperiods_selection):
-            return random.choice(num_subperiods_selection)
+            if player.id_in_group == choose_time_id and player.num_subperiods:
+                return int(player.num_subperiods)
         return num_subperiods
     else:
         return num_subperiods
@@ -57,7 +52,7 @@ def parse_config(config_file, players):
         rounds.append({
             'shuffle_role': True if row['shuffle_role'] == 'TRUE' else False,
             'period_length': int(row['period_length']),
-            'num_subperiods': calc_num_subperiods(str(row['choose_time']), int(row['num_subperiods']), players),
+            'num_subperiods': get_num_subperiods(str(row['choose_time']), int(row['num_subperiods']), int(row['choose_time_id']), players),
             'pure_strategy': True if row['pure_strategy'] == 'TRUE' else False,
             'show_at_worst': True if row['show_at_worst'] == 'TRUE' else False,
             'show_best_response': True if row['show_best_response'] == 'TRUE' else False,
