@@ -2,13 +2,19 @@
 {% load otree static %}
 
 {% block title %}
-    Welcome to LEEPS Online Laboratory!
+    Introduction and Instruction
 {% endblock %}
 
 {% block content %}
+
+<p>
+Welcome to LEEPS Online Laboratory!
+</p>
+
 <p>
 Thank you for participating in this interactive decision-making experiment.
-Please read the instruction below. The experiment will start when everyone is ready.
+Please read the instruction below and raise your hand if you are ready for the experiment.
+The experiment will start when everyone is ready.
 </p>
 
 <embed src="{% static 'continuous_discrete/instruction_bimatrix.pdf' %}" type="application/pdf" width="95%" height="700px" />

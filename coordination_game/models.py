@@ -165,7 +165,7 @@ class Player(BasePlayer):
     )
     num_subperiods = models.IntegerField(
         label='Enter the number of subperiods you prefer (0 for continuous time)',
-        min=0, max=120
+        min=0, max=90
     )
 
     def initial_decision(self):

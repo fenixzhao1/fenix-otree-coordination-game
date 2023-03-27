@@ -11,6 +11,11 @@ class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+class IntroductionChoose(Page):
+
+    def is_displayed(self):
+        return self.round_number == 2
+
 class ConfigUpdateWaitPage(WaitPage):
 
     body_text = 'Waiting for all players to be ready'
@@ -181,6 +186,7 @@ class Payment(Page):
 
 page_sequence = [
     Introduction,
+    IntroductionChoose,
     CommunicationWaitPage,
     Communication,
     CommunicationReceiveWaitPage,

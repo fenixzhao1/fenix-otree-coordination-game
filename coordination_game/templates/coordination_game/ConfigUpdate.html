@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<p>You are now playing Game {{ subsession.round_number }}</p>
+<p>You are now playing Game {{ subsession.round_number }}.</p>
 
 <p>
 Please enter 0 if you prefer to play under the continuous time environment.
@@ -15,16 +15,17 @@ Please enter 0 if you prefer to play under the continuous time environment.
 
 <p>
 Please enter a positive integer if you prefer to play under the discrete time environment,
-where the interger you enter is the number of periods you would like to have.
-Note that the total length of the game is 120 seconds, so the more periods you play, the shorter each period lasts.
+where the interger you enter is the number of periods you would like to play.
+Note that the total length of the game is 90 seconds, so the more periods you play, the shorter each period lasts.
 </p>
 
 {% if choose_time == 'row' %}
-    <p>Choose time is row</p>
+    <p>In this game, the time environment will be determined by the row player's choice.</p>
 {% elif choose_time == 'column' %}
-    <p>Choose time is column</p>
+    <p>In this game, the time environment will be determined by the column player's choice.</p>
 {% else %}
-    <p>Choose time is random</p>
+    <p>In this game, after you and your counterpart choose the preferred time environment,
+    the system will randomly pick one of the choices as the time environment in this game.</p>
 {% endif %}
 
     {% formfields %}

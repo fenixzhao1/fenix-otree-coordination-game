@@ -1,0 +1,47 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Instruction: Second Half of the Experiment.
+{% endblock %}
+
+{% block content %}
+
+<p>
+In the first half of the experiment, you have experienced two time environments:
+continuous time and discrete time (with various numbers of periods).
+In the second half the experiment,
+you and your counterpart can choose which time environment you prefer to play.
+The payoff matrices are similar between games.
+</p>
+
+<p>
+In the next following games, before you play each game, you can submit a number
+to indicate how many numbers of subperiods you prefer to play the game.
+</p>
+
+<ul>
+  <li>
+    Please enter 0 if you prefer to play under the continuous time environment.
+    If continuous time environment is selected, the game will be played in real time.
+  </li>
+  <li>
+    Please enter a positive integer if you prefer to play under the discrete time environment,
+    where the interger you enter is the number of periods you would like to play.
+    Note that the total length of the game is 90 seconds, so the more periods you play, the shorter each period lasts.
+    If discrete time environment is selected, the game will be played periods by periods.
+  </li>
+</ul>
+
+<p>
+After you and your counterpart submit your choices,
+the system will choose a time environment based on the experimental setting.
+</p>
+
+<p>
+Please raise your hands when you are ready for the second half of the experiment.
+</p>
+
+    {% next_button %}
+
+{% endblock %}
