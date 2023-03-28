@@ -52,8 +52,11 @@ class ConfigConfirmation(Page):
         return self.subsession.config is not None and str(self.subsession.config['choose_time']) != 'no'
 
     def vars_for_template(self):
+
         return {
-            'num_subperiods': self.subsession.config['num_subperiods']
+            'final_num_subperiods': self.subsession.config['num_subperiods'],
+            'self_num_subperiods': [ p.num_subperiods for p in self.group.get_players() if p.role() == self.player.role() ][0],
+            'other_num_subperiods': [ p.num_subperiods for p in self.group.get_players() if p.role() != self.player.role() ][0]
         }
 
 class CommunicationWaitPage(WaitPage):
