@@ -14,7 +14,7 @@ class Introduction(Page):
 class IntroductionChoose(Page):
 
     def is_displayed(self):
-        return self.round_number == 2
+        return self.round_number == 13
 
 class ConfigUpdateWaitPage(WaitPage):
 
