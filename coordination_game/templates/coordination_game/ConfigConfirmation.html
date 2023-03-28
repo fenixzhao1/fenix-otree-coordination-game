@@ -7,17 +7,16 @@
 
 {% block content %}
 
+<p>You have selected {{ self_num_subperiods }} and your counterpart has selected {{ other_num_subperiods }}.
+</p>
+
 {% if final_num_subperiods == 0 %}
-    <p>You will play the game under the continuous time environment.</p>
+    <p>Based on the system selection, you will play the game under the continuous time environment.</p>
 {% else %}
-    <p>You will play the game under the discrete time environment with {{ final_num_subperiods }} periods.</p>
+    <p>Based on the system selection, you will play the game under the discrete time environment with {{ final_num_subperiods }} periods.</p>
 {% endif %}
 
-{% if final_num_subperiods > 0 %}
-    <p>You have selected {{ self_num_subperiods }} and your counterpart has selected {{ other_num_subperiods }}.</p>
-{% endif %}
-
-    <p> If you are ready, press next. </p>
+    <p> If you are ready, press next to enter the game. </p>
 
     {% next_button %}
 {% endblock %}
