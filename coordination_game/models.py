@@ -21,7 +21,7 @@ class Constants(BaseConstants):
     players_per_group = 2
 	# Maximum number of rounds, actual number is taken as the max round
 	# in the config file.
-    num_rounds = 100
+    num_rounds = 50
     base_points = 0
 
 def get_num_subperiods(choose_time, num_subperiods, choose_time_id, players):
@@ -165,7 +165,7 @@ class Player(BasePlayer):
     )
     num_subperiods = models.IntegerField(
         label='Enter the number of subperiods you prefer (0 for continuous time)',
-        min=0, max=90
+        choices=[0, 6, 15, 30]
     )
 
     def initial_decision(self):

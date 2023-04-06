@@ -8,6 +8,7 @@ SESSION_CONFIGS = [
         app_sequence=['coordination_game'],
         config_file='demo.csv',
         num_silos=1,
+        second_stage=10
     ),
 ]
 
