@@ -9,7 +9,7 @@ hpack==4.0.0
 hyperframe==6.0.1
 jsonfield==3.1.0
 mockredispy==2.9.3
-otree==3.4.0
+otree>=3.4.0
 otree-redwood==0.9.4
 priority==2.0.0
 pytz==2019.2
