@@ -587,7 +587,6 @@ export class LeepsBimatrix extends PolymerElement {
         const deltaT = (t - this.lastT);
         const secondsPerSubperiod = this.periodLength / this.numSubperiods;
         this._subperiodProgress = 100 * ((deltaT / 1000) / secondsPerSubperiod);
-        console.log(deltaT, this._subperiodProgress);
         if(this.numSubperiods == 0){
             if(this.signalExist){
                 this.timer += 1;
