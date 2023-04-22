@@ -110,7 +110,7 @@ export class LeepsBimatrix extends PolymerElement {
                     margin-bottom: 10px;
                     --paper-progress-height: 30px;
                 }
-                
+
 
                 .light-blue {
                     background-color: #b5d9ff;
@@ -122,7 +122,7 @@ export class LeepsBimatrix extends PolymerElement {
 
             </style>
             <style>
-                .meter { 
+                .meter {
                     height: 30px;
                     position: relative;
                     background: #f3efe6;
@@ -154,12 +154,12 @@ export class LeepsBimatrix extends PolymerElement {
                     animation: progressBar 6s ease-in-out infinite;
                     animation-fill-mode:both;
                     -webkit-animation: progressBar 6s ease-in-out infinite;
-                    -webkit-animation-fill-mode:both; 
+                    -webkit-animation-fill-mode:both;
                     -moz-animation: progressBar 6s ease-in-out infinite;
-                    -moz-animation-fill-mode:both; 
+                    -moz-animation-fill-mode:both;
                 }
             </style>
-            
+
 
             <otree-constants id="constants"></otree-constants>
             <redwood-period
@@ -184,9 +184,9 @@ export class LeepsBimatrix extends PolymerElement {
             </redwood-channel>
 
             <div class="layout vertical center">
-            
+
                 <div class="layout vertical end">
-                    
+
 
                     <template is="dom-if" if="[[ signalthreeExist ]]">
                         <div class="layout vertical center">
@@ -208,7 +208,7 @@ export class LeepsBimatrix extends PolymerElement {
                             value="[[ _subperiodProgress ]]">
                         </paper-progress>
                     </template>
-                    
+
 
                     <div class="layout horizontal">
                         <div class="layout vertical">
@@ -507,18 +507,23 @@ export class LeepsBimatrix extends PolymerElement {
         this.otherPayoffs = this.payoffMatrix.map(
             val => parseInt(val[this.otherPayoffIndex]));
 
-        this.$.bot.payoffFunction = (myDecision, otherDecision) => {
-            const m = this.myPayoffs;
-            const row1 = myDecision * m[0] + (1 - myDecision) * m[2];
-            const row2 = myDecision * m[1] + (1 - myDecision) * m[3];
-            const flowPayoff = otherDecision * row1 + (1 - otherDecision) * row2;
-            return flowPayoff;
-        };
+        if (this.$.bot) {
+          this.$.bot.payoffFunction = (myDecision, otherDecision) => {
+              const m = this.myPayoffs;
+              const row1 = myDecision * m[0] + (1 - myDecision) * m[2];
+              const row2 = myDecision * m[1] + (1 - myDecision) * m[3];
+              const flowPayoff = otherDecision * row1 + (1 - otherDecision) * row2;
+              return flowPayoff;
+          };
+        }
+
 
         if (this.pureStrategy) {
             // if using pure strategy, set bot to only choose pure strategies
-            this.$.bot.lambda = 1;
-            this.$.bot.pattern = true;
+            if (this.$.bot) {
+              this.$.bot.lambda = 1;
+              this.$.bot.pattern = true;
+            }
 
             // only set decision string if we're not doing continuous strategy
             this._myPlannedDecisionString = new String(this.initialDecision);
@@ -571,7 +576,7 @@ export class LeepsBimatrix extends PolymerElement {
                     snd.play();
                 }
             }
-            
+
         }
     }
     _onGroupDecisionsChanged() {
@@ -582,6 +587,7 @@ export class LeepsBimatrix extends PolymerElement {
         const deltaT = (t - this.lastT);
         const secondsPerSubperiod = this.periodLength / this.numSubperiods;
         this._subperiodProgress = 100 * ((deltaT / 1000) / secondsPerSubperiod);
+        console.log(deltaT, this._subperiodProgress);
         if(this.numSubperiods == 0){
             if(this.signalExist){
                 this.timer += 1;
