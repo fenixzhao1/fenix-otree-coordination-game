@@ -8,7 +8,7 @@ SESSION_CONFIGS = [
         app_sequence=['coordination_game'],
         config_file='demo.csv',
         num_silos=1,
-    ),
+    )
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
